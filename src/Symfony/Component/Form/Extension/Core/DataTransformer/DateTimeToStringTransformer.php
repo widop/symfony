@@ -103,7 +103,7 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
 
             // Force value to be in same format as given to transform
             if ($value !== $dateTime->format($this->format)) {
-                $dateTime = new \DateTime($dateTime->format($this->format), new \DateTimeZone($this->outputTimezone));
+                $dateTime = \DateTime::createFromFormat($this->format, $dateTime->format($this->format), new \DateTimeZone($this->outputTimezone));
             }
 
             if ($this->inputTimezone !== $this->outputTimezone) {

@@ -69,9 +69,14 @@ class DateTimeType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $parts = array('year', 'month', 'day', 'hour', 'minute');
+        $parts = array('year', 'month', 'day', 'hour');
         $dateParts = array('year', 'month', 'day');
-        $timeParts = array('hour', 'minute');
+        $timeParts = array('hour');
+
+        if ($options['with_minutes']) {
+            $parts[] = 'minute';
+            $timeParts[] = 'minute';
+        }
 
         if ($options['with_seconds']) {
             $parts[] = 'second';
@@ -122,6 +127,7 @@ class DateTimeType extends AbstractType
                 'hours',
                 'minutes',
                 'seconds',
+                'with_minutes',
                 'with_seconds',
                 'empty_value',
                 'required',
@@ -227,6 +233,7 @@ class DateTimeType extends AbstractType
             'widget'         => null,
             'date_widget'    => $dateWidget,
             'time_widget'    => $timeWidget,
+            'with_minutes'   => true,
             'with_seconds'   => false,
             // Don't modify \DateTime classes by reference, we treat
             // them like immutable value objects
