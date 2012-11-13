@@ -97,6 +97,7 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
         try {
             $dateTime = new \DateTime($value, new \DateTimeZone($this->outputTimezone));
             $lastErrors = \DateTime::getLastErrors();
+
             if (0 < $lastErrors['warning_count'] || 0 < $lastErrors['error_count']) {
                 throw new \UnexpectedValueException(implode(', ', array_merge(array_values($lastErrors['warnings']), array_values($lastErrors['errors']))));
             }
@@ -105,12 +106,16 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
             if ($value !== $dateTime->format($this->format)) {
                 $dateTime = \DateTime::createFromFormat($this->format, $dateTime->format($this->format), new \DateTimeZone($this->outputTimezone));
             }
-
-            if ($this->inputTimezone !== $this->outputTimezone) {
-                $dateTime->setTimeZone(new \DateTimeZone($this->inputTimezone));
-            }
         } catch (\Exception $e) {
-            throw new TransformationFailedException($e->getMessage(), $e->getCode(), $e);
+            $dateTime = \DateTime::createFromFormat($this->format, $value, new \DateTimeZone($this->outputTimezone));
+
+            if ($dateTime === false) {
+                throw new TransformationFailedException($e->getMessage(), $e->getCode(), $e);
+            }
+        }
+
+        if ($this->inputTimezone !== $this->outputTimezone) {
+            $dateTime->setTimeZone(new \DateTimeZone($this->inputTimezone));
         }
 
         return $dateTime;

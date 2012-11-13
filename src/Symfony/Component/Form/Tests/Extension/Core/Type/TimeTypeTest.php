@@ -121,7 +121,7 @@ class TimeTypeTest extends LocalizedTestCase
             'with_minutes' => false,
         ));
 
-        $form->bind('03:04:05');
+        $form->bind('03');
 
         $this->assertEquals(new \DateTime('03:00:00 UTC'), $form->getData());
         $this->assertEquals('03', $form->getViewData());
@@ -214,7 +214,7 @@ class TimeTypeTest extends LocalizedTestCase
             'with_minutes' => false,
         ));
 
-        $form->bind('03:04:05');
+        $form->bind('03');
 
         $this->assertEquals('03:00:00', $form->getData());
         $this->assertEquals('03', $form->getViewData());
