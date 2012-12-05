@@ -23,6 +23,23 @@ class FileTypeTest extends TypeTestCase
         ;
     }
 
+    public function testFormBuilderIfEntityHasEmptyFile()
+    {
+        $entity = new \StdClass;
+        $entity->imageFile = $this->createUploadedFileMock('abcdef', 'original.jpg', true);
+
+        try {
+            $form = $this->factory->createBuilder('form', $entity)
+                ->add('imageFile', 'file')
+                ->getForm();
+
+            $form->bind(array('imageFile' => null));
+            return;
+        } catch (\Symfony\Component\Form\Exception\FormException $e) {
+            $this->fail();
+        }
+    }
+
     public function testDontPassValueToView()
     {
         $form = $this->factory->create('file');
