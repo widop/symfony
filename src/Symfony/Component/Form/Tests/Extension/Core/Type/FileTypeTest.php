@@ -12,6 +12,7 @@
 namespace Symfony\Component\Form\Tests\Extension\Core\Type;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Form\Exception\FormException;
 
 class FileTypeTest extends TypeTestCase
 {
@@ -34,8 +35,7 @@ class FileTypeTest extends TypeTestCase
                 ->getForm();
 
             $form->bind(array('imageFile' => null));
-            return;
-        } catch (\Symfony\Component\Form\Exception\FormException $e) {
+        } catch (FormException $e) {
             $this->fail();
         }
     }
